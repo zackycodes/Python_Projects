@@ -1,0 +1,71 @@
+import pygame
+import sys
+from datetime import datetime
+
+# Initialize Pygame
+pygame.init()
+
+# Constants
+FONT_SIZE = 100
+FPS = 60
+
+# Initial screen size
+screen_width, screen_height = 800, 200
+
+# Setup the screen
+screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
+pygame.display.set_caption("Digital Clock")
+
+# Load a font
+font = pygame.font.SysFont('Circular Std Black', FONT_SIZE)  # Formal font
+
+# Clock object to control the frame rate
+clock = pygame.time.Clock()
+
+def get_time_string():
+    """Get the current time as a formatted string."""
+    now = datetime.now()
+    return now.strftime("%I:%M:%S %p")
+
+def draw_gradient_background(screen, width, height):
+    """Draw a gradient background."""
+    top_color = (15, 205, 128)    # idk
+    bottom_color = (34, 139, 34)   # Jungle green
+
+    for y in range(height):
+        color = [
+            top_color[i] + (bottom_color[i] - top_color[i]) * y // height
+            for i in range(3)
+        ]
+        pygame.draw.line(screen, color, (0, y), (width, y))
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.VIDEORESIZE:
+            screen_width, screen_height = event.size
+            screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
+
+    # Fill the background with a gradient
+    draw_gradient_background(screen, screen_width, screen_height)
+
+    # Get the current time as a string
+    time_string = get_time_string()
+
+    # Render the time string
+    text_surface = font.render(time_string, True, (255, 255, 255))  # White text
+    text_rect = text_surface.get_rect(center=(screen_width / 2, screen_height / 2))
+
+    # Draw the text on the screen
+    screen.blit(text_surface, text_rect)
+
+    # Update the display
+    pygame.display.flip()
+
+    # Cap the frame rate
+    clock.tick(FPS)
+
+pygame.quit()
+sys.exit()
