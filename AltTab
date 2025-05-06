@@ -1,0 +1,10 @@
+import pyautogui
+import keyboard
+
+def on_tilde_press():
+    pyautogui.hotkey('ctrl','b')
+
+keyboard.add_hotkey('fn', on_tilde_press)
+
+# Keep the script running
+keyboard.wait('esc')  # You can change 'esc' to any key you want to use to stop the script
